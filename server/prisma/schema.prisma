@@ -22,6 +22,7 @@ model Address {
   id         String  @id @default(cuid())
   country    String
   state      String
+  city       String
   cep        String
   street     String
   number     String
