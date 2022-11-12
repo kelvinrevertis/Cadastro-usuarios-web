@@ -8,20 +8,25 @@ datasource db {
 }
 
 model User {
-  id       String @id @default(cuid())
+  id       String  @id @default(cuid())
   name     String
-  email    String @unique
-  cpf      String @unique
-  pis      String @unique
+  email    String  @unique
+  cpf      String  @unique
+  pis      String? @unique
   password String
+
+  userAdresses Address[]
 }
 
-// model Address {
+model Address {
+  id         String  @id @default(cuid())
+  country    String
+  state      String
+  cep        String
+  street     String
+  number     String
+  complement String?
 
-//   country    String
-//   state      String
-//   cep        String
-//   street     String
-//   number     String
-//   complement String
-// }
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+}
