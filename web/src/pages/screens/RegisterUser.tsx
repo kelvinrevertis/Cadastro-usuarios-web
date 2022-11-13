@@ -56,9 +56,20 @@ export function RegisterUser() {
                 number: target.number.value,
                 complement: target.complement.value,
 
+                //name:  userName,
+                // email: userEmail,
+                // cpf: userCpf,
+                // pis: userPis,
+                // password: userPassword,
+                // country: userCountry,
+                // cep: userCep,
+                // state: userState,
+                // street: userStreet,
+                // number: userNumber,
+                // complement: userComplement,
             });
 
-            alert(`Usuário ${target.name.value} criado com sucesso!`)
+            alert(`Usuário ${target.name} criado com sucesso!`)
 
 
 
@@ -67,7 +78,8 @@ export function RegisterUser() {
 
         } finally {
             
-            event.target.reset()
+            const form = event.target as HTMLFormElement;
+            form.reset()
         }
     }
     return (
