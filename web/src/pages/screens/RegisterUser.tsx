@@ -9,7 +9,7 @@ type FormValue = {
     password: { value: string }
     country: { value: string }
     state: { value: string }
-    city: {value: string}
+    city: { value: string }
     cep: { value: string }
     street: { value: string }
     number: { value: string }
@@ -41,7 +41,7 @@ export function RegisterUser() {
         event.preventDefault()
 
         try {
-            await api.post('/create-user', {
+            await api.post('/user', {
 
                 name: target.name.value,
                 email: target.email.value,
@@ -69,7 +69,7 @@ export function RegisterUser() {
                 // complement: userComplement,
             });
 
-            alert(`Usuário ${target.name} criado com sucesso!`)
+            alert(`Usuário ${target.name.value} criado com sucesso!`)
 
 
 
@@ -77,9 +77,8 @@ export function RegisterUser() {
             alert('Falha ao criar o usuario!')
 
         } finally {
-            
-            const form = event.target as HTMLFormElement;
-            form.reset()
+            const resetForm = event.target as HTMLFormElement;
+            resetForm.reset()
         }
     }
     return (
