@@ -10,14 +10,18 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/jsonwebtoken": "^8.5.9",
     "prisma": "^4.6.1",
     "tsx": "^3.12.0",
     "typescript": "^4.8.4"
   },
   "dependencies": {
     "@fastify/cors": "^8.2.0",
+    "@fastify/jwt": "^6.3.3",
     "@prisma/client": "^4.6.1",
     "fastify": "^4.9.2",
+    "firebase": "^9.14.0",
+    "jsonwebtoken": "^8.5.1",
     "zod": "^3.19.1"
   }
 }

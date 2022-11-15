@@ -1,7 +1,8 @@
 import { FormEvent, useState } from "react";
-import { api } from "../../lib/axios";
+import { api } from "../lib/axios";
+import Link from "next/link";
 
-export function RegisterUser() {
+function RegisterUser() {
     const [user, setUser] = useState({})
 
     function handleChange(event) {
@@ -59,8 +60,10 @@ export function RegisterUser() {
                 <input type="text" name="complement" placeholder="Complemento" onChange={handleChange} />
 
                 <button type="submit">Cadastrar</button>
+                <Link href="/">Retornar</Link>
             </form>
         </>
     );
 }
 
+export default RegisterUser

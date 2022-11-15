@@ -1,8 +1,9 @@
 import Fastify from "fastify";
 import cors from '@fastify/cors'
+import jwt from '@fastify/jwt'
 
 import { userRoutes } from "./routes/user";
-
+// import {authRoutes} from './routes/auth'
 
 export interface BodyParams {
     name: string
@@ -33,6 +34,7 @@ async function bootstrap() {
         origin: true,
     })
 
+    // await fastify.register(authRoutes)
     await fastify.register(userRoutes)
 
     await fastify.listen({ port: 3333 })
