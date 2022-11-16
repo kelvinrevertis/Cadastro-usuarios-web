@@ -1,5 +1,5 @@
 import { FormEvent, useState } from "react";
-import { api } from "../lib/axios";
+import { api } from "../hooks/axios";
 import Link from "next/link";
 
 function RegisterUser() {

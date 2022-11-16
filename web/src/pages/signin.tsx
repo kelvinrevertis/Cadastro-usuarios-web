@@ -1,57 +1,42 @@
-import { FormEvent, useState } from "react";
-import { useAuth } from "../hooks/useAuth"
+import { useContext, useState } from "react";
+import { useRouter } from "next/router";
 import Link from "next/link";
-import { api } from "../lib/axios";
+import { AuthContext } from "../contexts/AuthContext";
+
+export default function SignIn() {
+    const router = useRouter()
+    const auth = useContext(AuthContext)
+
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
 
-export function SignIn() {
-
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-
-    function handleSubmit(event: FormEvent) {
-        event.preventDefault();
-
-        console.log("submit", {email, password})
+    async function handleLogin() {
+        console.log("teste")
+        if (email && password) {
+            console.log("teste2")
+            try {
+                router.push('/dashboard')
+            } catch (error) {
+                console.log(error)
+            }
+        }
     }
+    return (
 
-    const { signIn, user } = useAuth();
+        <div>
+            <h1>Olá visitante!</h1>
 
-    // async function handleSignIn() {
-
-    // }
-    async function signinUser(event){
-
-    }
-
-    console.log('Dados do usuário =>', user)
-
-    // try {
-        await api.post('/signin', user);
-
-        alert(`Usuário criado com sucesso!`)
-        console.log(user)
-
-
-    // } catch (error) {
-    //     alert('Falha ao criar o usuario!')
-
-    // } finally {
-    //     event.target.reset()
-    // }
-
-return (
-    <>
-        <h1>Olá visitante!</h1>
-        <form action="" onSubmit={handleSubmit}>
-            <input type="text" placeholder="E-mail, CPF ou PIS"
+            <input type="text" value={email} placeholder="E-mail, CPF ou PIS"
                 onChange={event => setEmail(event.target.value)} />
-            <input type="text" placeholder="senha"
+            <input type="text" value={password} placeholder="senha"
                 onChange={event => setPassword(event.target.value)} />
-            <button onClick={signIn}>SignIn</button>
+            <button onClick={handleLogin} >SignIn</button>
             <Link href="/registeruser" >Cadastrar</Link>
-        </form>
 
-    </>
+
+        </div>
     )
+
 }
+
