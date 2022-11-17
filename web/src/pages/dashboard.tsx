@@ -1,24 +1,25 @@
 import { useContext, useEffect } from "react"
 import { AuthContext } from "../contexts/AuthContext"
 import { api } from "../hooks/axios"
-import {parseCookies} from 'nookies'
-import {useRouter} from 'next/router'
+import { parseCookies } from 'nookies'
+import { useRouter } from 'next/router'
 import Link from "next/link"
 
 
-function Dashboard({name}) {
-    const arrayName = name.split(" ")
+function Dashboard({ userName }) {
+    const arrayName = userName.split(" ")
     const firstName = arrayName[0]
 
 
     const route = useRouter();
     return (
 
+
         <div>
-            
+
             <h1>Olá {firstName} </h1>
-            <Link href="/editprofile" >Editar perfil</Link>
-            
+            <Link href="/update" >Editar perfil</Link>
+
         </div>
 
 
@@ -27,22 +28,21 @@ function Dashboard({name}) {
 
 export default Dashboard
 
-export const getServerSideProps = async(ctx)=>{
-    const {['register.token']: token} = parseCookies(ctx)
+export const getServerSideProps = async (ctx) => {
+    const { ['register.token']: token } = parseCookies(ctx)
 
-    if(!token){
-        return{
-            redirect:{
-                destination:'/signin',
+    if (!token) {
+        return {
+            redirect: {
+                destination: '/signin',
                 permanent: false,
             }
         }
     }
-    const {data:user} = await api.get('/login',{headers:{authorization:`Bearer ${token}`}})
-    console.log('USER RETORNO',user ? { user: user.name } : "teste")
-    const name = user.name
-    console.log({name})
-    return{
-        props: {name}
-        }
+    const { data: user } = await api.get('/login', { headers: { authorization: `Bearer ${token}` } })
+
+    const userName = user.user.name
+    return {
+        props: { userName }
+    }
 }
