@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import {useState } from "react";
 import { api } from "../hooks/axios";
 import Link from "next/link";
 
@@ -16,7 +16,7 @@ function RegisterUser() {
 
         event.preventDefault();
 
-        console.log(user)
+        console.log('Usuario:',user)
 
         try {
             await api.post('/user', user);

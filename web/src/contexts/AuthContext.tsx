@@ -1,60 +1,90 @@
-import { createContext, ReactNode, useState } from "react";
+import { createContext, ReactNode, useEffect, useState } from "react";
+import { api } from "../hooks/axios";
+import { setCookie, parseCookies } from 'nookies'
+import Router, { useRouter } from 'next/router'
 
-interface UserProps {
+type User = {
+    id: string
     name: string
     email: string
     cpf: string
     pis: string
     password: string
-    country: string
-    state: string
-    city: string
-    cep: string
-    street: string
-    number: string
-    complement: string
-
 }
 
-export interface AuthContextDataProps {
-    user: UserProps
-    signIn: () => Promise<void>
+type SignInData = {
+    email: string;
+    password: string;
 }
 
-interface AuthProviderProps{
+export type AuthContextTypes = {
+    isAuthenticated: boolean;
+    user: User | null;
+    signIn: (data: SignInData) => Promise<void>
+}
+
+
+interface AuthProviderProps {
     children: ReactNode
 }
 
-export const AuthContext = createContext({} as AuthContextDataProps);
+export const AuthContext = createContext({} as AuthContextTypes)
 
-export function AuthContextProvider({ children }: AuthProviderProps) {
-    const [user, setUser] = useState<UserProps>({}as UserProps)
+export function AuthProvider({ children }: AuthProviderProps) {
 
-    async function signIn() {
-        console.log('está logando')
+    const route = useRouter();
+    const { id } = route.query;
+
+    const [user, setUser] = useState<User | null>(null);
+
+    const isAuthenticated = !!user;
+
+    useEffect(() => {
+        const { 'register.token': token } = parseCookies();
+
+        if (token) {
+            api.get(`/login`)
+                .then(response => setUser(response.data))
+                .catch(error => console.log(error))
+        }
+
+
+    }, [api]);
+
+    async function signIn({ email, password }: SignInData) {
+        try{
+            const { data: { token, user } } = await api.post('/signin', {
+                email,
+                password,
+            })
+    
+            setCookie(undefined, 'register.token', token, {
+                maxAge: 60 * 60 * 1, //1 hour
+            })
+    
+            setUser(user)
+    
+            Router.push('/dashboard')
+        }catch(error){
+            console.log(error)
+            alert('Não foi possível logar, verifique os seus dados!')
+        }
+
     }
 
-    return (
-        <AuthContext.Provider value={{
-            signIn,
-            user: {
-                name: 'Kelvin Revertis',
-                email: 'kelvinrev2@hotmail.com',
-                cpf: '12313446464',
-                pis: '23131776546',
-                password: 'Testetatasta',
-                country: 'Brasil',
-                state: 'Mg',
-                city: 'Teofilo otoni',
-                cep: '39801-000',
-                street: 'Gustavo Bamberg',
-                number: '99',
-                complement: 'apto 301',
-            }
-        }}>
-            { children }
 
-        </AuthContext.Provider>
-    )
+async function login() {
+    const user: any = await api.get('/login')
+
+    setUser(user)
+
+}
+
+return (
+    <AuthContext.Provider value={{ isAuthenticated, user, signIn }}>
+        {children}
+
+    </AuthContext.Provider>
+)
 
 }

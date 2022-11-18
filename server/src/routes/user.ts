@@ -64,7 +64,7 @@ export async function userRoutes(fastify: FastifyInstance) {
                 street,
                 number,
                 complement,
-            }
+            },
         })
         const user: any = await prisma.user.update({
             where: {

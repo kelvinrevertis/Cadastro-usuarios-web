@@ -1,5 +1,4 @@
 import { useContext, useState } from "react";
-import { useRouter } from "next/router";
 import Link from "next/link";
 import { AuthContext } from "../contexts/AuthContext";
 import { useForm } from 'react-hook-form'
@@ -7,14 +6,11 @@ import { parseCookies } from "nookies";
 
 export default function SignIn() {
     const { register, handleSubmit } = useForm();
-    const router = useRouter()
+
     const { signIn } = useContext(AuthContext)
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
-
-
 
     async function handleSignIn(data) {
         await signIn(data)
@@ -54,7 +50,6 @@ export const getServerSideProps = async (ctx) => {
             }
         }
     }
-
     return {
         props: {}
     }

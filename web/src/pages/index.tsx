@@ -1,11 +1,7 @@
-import { AuthContextProvider } from "../contexts/AuthContext"
-import Link from "next/link"
-import { SignIn } from "./signin"
-
 export default function Home() {
   return (
-    <SignIn/>
-      )
+    <h1>Vc não deveria entrar aqui!</h1>
+  )
 }
 
 export const getServerSideProps = async () => {
@@ -16,12 +12,16 @@ export const getServerSideProps = async () => {
     console.log(data)
 
     return {
+      redirect: {
+        permanent: false,
+        destination: `/signin`
+      },
       props: {}
     }
   } catch (error) {
     console.log(error)
     return {
-      props:{}
+      props: {}
     }
   }
 }
