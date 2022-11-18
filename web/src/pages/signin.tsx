@@ -3,6 +3,7 @@ import Link from "next/link";
 import { AuthContext } from "../contexts/AuthContext";
 import { useForm } from 'react-hook-form'
 import { parseCookies } from "nookies";
+import { Button } from "../components/Button";
 
 export default function SignIn() {
     const { register, handleSubmit } = useForm();
@@ -32,6 +33,7 @@ export default function SignIn() {
                 <button>SignIn</button>
             </form>
             <Link href="/registeruser" >Cadastrar</Link>
+            <Button>Teste</Button>
 
 
         </div>

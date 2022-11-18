@@ -66,7 +66,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
     
             Router.push('/dashboard')
         }catch(error){
-            console.log(error)
             alert('Não foi possível logar, verifique os seus dados!')
         }
 

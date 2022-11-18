@@ -23,29 +23,46 @@ export async function userRoutes(fastify: FastifyInstance) {
 
     fastify.get<{ Body: BodyParams; Params: IdParam }>('/user/:id', async (request, reply) => {
         const { id } = request.params;
-        const users = await prisma.user.findUnique({
+        const user = await prisma.user.findUnique({
             where: {
-                id,
+                id: String(id),
+            },
+            include: {
+                userAdresses: {
+                    where: {
+                        userId: String(id)
+                    }
+                }
             }
         })
 
-        return reply.status(200).send(users ? { user: users.name } : "teste")
+        return reply.status(200).send(user)
     })
 
 
-    fastify.get<{ Body: BodyParams; Params: IdParam }>('/user', async () => {
+    fastify.get<{ Body: BodyParams; Params: IdParam }>('/user', async (request, reply) => {
+        const { id, userId } = request.params;
 
+        const user = await prisma.user.findMany({
+            where: {
+                id,
+            },
+            include: {
+                userAdresses: {
+                    where: {
+                        userId
+                    }
+                }
+            }
+        })
 
-        const users = await prisma.user.findMany()
-
-        return { users }
+        return { user }
     })
 
 
     fastify.put<{ Body: BodyParams; Params: IdParam }>('/user/:id', async (request, reply) => {
         const { id, userId } = request.params
         const { name, cpf, email, pis, password, country, state, cep, city, street, number, complement } = request.body
-
         const getAddress: any = await prisma.address.findFirst({
             where: {
                 userId
@@ -66,7 +83,7 @@ export async function userRoutes(fastify: FastifyInstance) {
                 complement,
             },
         })
-        const user: any = await prisma.user.update({
+        const user = await prisma.user.update({
             where: {
                 id,
             },
@@ -163,8 +180,8 @@ export async function userRoutes(fastify: FastifyInstance) {
             }
         })
         console.log('ID:', id)
-        console.log('USUARIO E ENDEREÇO:', user)
-        return reply.status(200).send({user})
+        console.log('USUARIO E ENDEREÇO:', user?.userAdresses[0].country)
+        return reply.status(200).send({ user })
 
     })
 

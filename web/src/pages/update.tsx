@@ -1,19 +1,14 @@
 import Link from "next/link";
-import { AuthContext } from "../contexts/AuthContext";
-import Router, { useRouter } from 'next/router'
+import Router from 'next/router'
 import { parseCookies } from "nookies";
-import { FormEvent, useContext, useState } from "react";
+import { useState } from "react";
 import { api } from "../hooks/axios";
-import { useForm } from "react-hook-form";
-import { userAgent } from "next/server";
 import { logout } from './dashboard'
+import { Input } from "../components/Input";
 
 
 function UpdateUser({ user, address }) {
     const [update, setUpdate] = useState({})
-
-    const arrayName = user.name.split(" ")
-    const firstName = arrayName[0]
 
     function handleChange(event) {
         setUpdate({
@@ -28,7 +23,6 @@ function UpdateUser({ user, address }) {
 
         console.log('Usuario:', update)
 
-
         try {
             await api.put(`/user/${user.id}`, update);
             console.log(user.id)
@@ -41,6 +35,7 @@ function UpdateUser({ user, address }) {
 
         } finally {
             event.target.reset()
+            document.location.reload();
         }
     }
 
@@ -63,36 +58,36 @@ function UpdateUser({ user, address }) {
     return (
 
         <div>
-            <h1>Olá {firstName} </h1>
+            <h1>Atualize seus dados! </h1>
             <form onSubmit={updateUser}>
 
 
-                <input type="text" name="name" required placeholder={user.name} onChange={handleChange} />
+                <Input type="text" name="name" placeholder={user.name} onChange={handleChange} />
 
-                <input type="text" name="email" required placeholder={user.email} onChange={handleChange} />
+                <Input type="text" name="email" placeholder={user.email} onChange={handleChange} />
 
-                <input type="text" name="cpf" required placeholder={user.cpf} onChange={handleChange} />
+                <Input type="text" name="cpf" placeholder={user.cpf} onChange={handleChange} />
 
-                <input type="text" name="pis" required placeholder={user.pis} onChange={handleChange} />
+                <Input type="text" name="pis" placeholder={user.pis} onChange={handleChange} />
 
-                <input type="text" name="password" required placeholder={user.password} onChange={handleChange} />
+                <Input type="text" name="password" placeholder={user.password} onChange={handleChange} />
 
-                <input type="text" name="country" required placeholder={address.country} onChange={handleChange} />
+                <Input type="text" name="country" placeholder={address.country} onChange={handleChange} />
 
-                <input type="text" name="state" required placeholder={address.state} onChange={handleChange} />
+                <Input type="text" name="state" placeholder={address.state} onChange={handleChange} />
 
-                <input type="text" name="city" required placeholder={address.city} onChange={handleChange} />
+                <Input type="text" name="city" placeholder={address.city} onChange={handleChange} />
 
-                <input type="text" name="cep" required placeholder={address.cep} onChange={handleChange} />
+                <Input type="text" name="cep" placeholder={address.cep} onChange={handleChange} />
 
-                <input type="text" name="street" required placeholder={address.street} onChange={handleChange} />
+                <Input type="text" name="street" placeholder={address.street} onChange={handleChange} />
 
-                <input type="text" name="number" required placeholder={address.number} onChange={handleChange} />
+                <Input type="text" name="number" placeholder={address.number} onChange={handleChange} />
 
-                <input type="text" name="complement" required placeholder={address.complement} onChange={handleChange} />
+                <Input type="text" name="complement" placeholder={address.complement} onChange={handleChange} />
 
-                <button type="submit">Atualizar</button>
-                <Link href="/">Retornar</Link>
+                <button>Atualizar</button>
+                <Link href="/dashboard">Retornar</Link>
             </form>
             <Link href="/signin" onClick={deleteUser}>Deletar usuario</Link>
         </div>

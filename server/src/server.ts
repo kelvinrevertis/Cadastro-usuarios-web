@@ -18,7 +18,14 @@ export interface BodyParams {
     street: string
     number: string
     complement: string
+
 }
+
+export interface User extends BodyParams{
+
+}
+
+
 
 export interface IdParam {
     id: string;
