@@ -43,7 +43,7 @@ function RegisterUser() {
 
                 <Input type="text" name="pis" placeholder="PIS" onChange={handleChange} />
 
-                <Input type="text" name="password" required placeholder="Password" onChange={handleChange} />
+                <Input type="password" name="password" required placeholder="Password" onChange={handleChange} />
 
                 <Input type="text" name="country" placeholder="País" onChange={handleChange} />
 

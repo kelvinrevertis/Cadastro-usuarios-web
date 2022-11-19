@@ -25,7 +25,7 @@ export default function SignIn() {
 
                 <Input type="text" placeholder="E-mail, CPF ou PIS" {...register('email')} />
 
-                <Input type="text" placeholder="senha" {...register('password')} />
+                <Input type="password" placeholder="password" {...register('password')} />
 
                 <div className=" flex justify-center gap-6 pt-4">
 

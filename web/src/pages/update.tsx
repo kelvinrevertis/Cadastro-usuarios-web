@@ -66,7 +66,7 @@ function UpdateUser({ user, address }) {
 
                 <Input type="text" required name="pis" placeholder={userData.pis} {...register('pis')} />
 
-                <Input type="text" required name="password" placeholder={userData.password} {...register('password')} />
+                <Input type="password" required name="password" placeholder='***********' {...register('password')} />
 
                 <Input type="text" required name="country" placeholder={userData.country} {...register('country')} />
 
