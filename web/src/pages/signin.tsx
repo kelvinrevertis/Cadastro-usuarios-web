@@ -4,41 +4,38 @@ import { AuthContext } from "../contexts/AuthContext";
 import { useForm } from 'react-hook-form'
 import { parseCookies } from "nookies";
 import { Button } from "../components/Button";
+import { Input } from "../components/Input";
+import { FormDiv } from "../components/FormDiv";
+import { LinkButton } from "../components/LinkButton";
 
 export default function SignIn() {
     const { register, handleSubmit } = useForm();
 
     const { signIn } = useContext(AuthContext)
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-
     async function handleSignIn(data) {
         await signIn(data)
     }
+
     return (
 
-        <div>
-            <h1>Olá visitante!</h1>
-            <form onSubmit={handleSubmit(handleSignIn)}>
+        <FormDiv>
+            <h1 className="text-4xl font-medium mt-40 mb-5">Olá visitante!</h1>
+            <form className=" w-4/5 items-center " onSubmit={handleSubmit(handleSignIn)}>
 
-                <input {...register('email')} type="text"
-                    value={email} placeholder="E-mail, CPF ou PIS"
-                    onChange={event => setEmail(event.target.value)} />
+                <Input type="text" placeholder="E-mail, CPF ou PIS" {...register('email')} />
 
-                <input {...register('password')}
-                    type="text" value={password} placeholder="senha"
-                    onChange={event => setPassword(event.target.value)} />
+                <Input type="text" placeholder="senha" {...register('password')} />
 
-                <button>SignIn</button>
+                <div className=" flex justify-center gap-6 pt-4">
+
+                    <Button type="submit">SignIn</Button>
+
+                    <LinkButton href="/registeruser" children='Cadastrar' />
+                </div>
             </form>
-            <Link href="/registeruser" >Cadastrar</Link>
-            <Button>Teste</Button>
-
-
-        </div>
+        </FormDiv >
     )
-
 }
 
 export const getServerSideProps = async (ctx) => {

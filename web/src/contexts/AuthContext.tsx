@@ -56,6 +56,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
             const { data: { token, user } } = await api.post('/signin', {
                 email,
                 password,
+            
             })
     
             setCookie(undefined, 'register.token', token, {
@@ -71,13 +72,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     }
 
-
-async function login() {
-    const user: any = await api.get('/login')
-
-    setUser(user)
-
-}
 
 return (
     <AuthContext.Provider value={{ isAuthenticated, user, signIn }}>

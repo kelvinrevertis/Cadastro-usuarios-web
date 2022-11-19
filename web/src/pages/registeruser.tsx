@@ -1,6 +1,10 @@
 import {useState } from "react";
 import { api } from "../hooks/axios";
 import Link from "next/link";
+import { FormDiv } from "../components/FormDiv";
+import { Input } from "../components/Input";
+import { LinkButton } from "../components/LinkButton";
+import { Button } from "../components/Button";
 
 function RegisterUser() {
     const [user, setUser] = useState({})
@@ -16,14 +20,10 @@ function RegisterUser() {
 
         event.preventDefault();
 
-        console.log('Usuario:',user)
-
         try {
             await api.post('/user', user);
 
             alert(`Usuário criado com sucesso!`)
-            console.log(user)
-
 
         } catch (error) {
             alert('Falha ao criar o usuario!')
@@ -33,36 +33,38 @@ function RegisterUser() {
         }
     }
     return (
-        <>
+        <FormDiv>
             <form onSubmit={createUser}>
-                <input type="text" name="name" required placeholder="Nome" onChange={handleChange} />
+                <Input  type="text" name="name" required placeholder="Nome" onChange={handleChange} />
 
-                <input type="text" name="email" required placeholder="E-mail" onChange={handleChange} />
+                <Input type="text" name="email" required placeholder="E-mail" onChange={handleChange} />
 
-                <input type="text" name="cpf" required placeholder="CPF" onChange={handleChange} />
+                <Input type="text" name="cpf" required placeholder="CPF" onChange={handleChange} />
 
-                <input type="text" name="pis" placeholder="PIS" onChange={handleChange} />
+                <Input type="text" name="pis" placeholder="PIS" onChange={handleChange} />
 
-                <input type="text" name="password" required placeholder="Password" onChange={handleChange} />
+                <Input type="text" name="password" required placeholder="Password" onChange={handleChange} />
 
-                <input type="text" name="country" placeholder="País" onChange={handleChange} />
+                <Input type="text" name="country" placeholder="País" onChange={handleChange} />
 
-                <input type="text" name="state" placeholder="Estado" onChange={handleChange} />
+                <Input type="text" name="state" placeholder="Estado" onChange={handleChange} />
 
-                <input type="text" name="city" placeholder="Cidade" onChange={handleChange} />
+                <Input type="text" name="city" placeholder="Cidade" onChange={handleChange} />
 
-                <input type="text" name="cep" placeholder="CEP" onChange={handleChange} />
+                <Input type="text" name="cep" placeholder="CEP" onChange={handleChange} />
 
-                <input type="text" name="street" placeholder="Rua" onChange={handleChange} />
+                <Input type="text" name="street" placeholder="Rua" onChange={handleChange} />
 
-                <input type="text" name="number" placeholder="Numero" onChange={handleChange} />
+                <Input type="text" name="number" placeholder="Numero" onChange={handleChange} />
 
-                <input type="text" name="complement" placeholder="Complemento" onChange={handleChange} />
-
-                <button type="submit">Cadastrar</button>
-                <Link href="/">Retornar</Link>
+                <Input type="text" name="complement" placeholder="Complemento" onChange={handleChange} />
+                
+                <div className=" flex justify-center gap-6 pt-4">
+                <Button type="submit">Cadastrar</Button>
+                <LinkButton href="/signin" >Retornar</LinkButton>
+                </div>
             </form>
-        </>
+        </FormDiv>
     );
 }
 

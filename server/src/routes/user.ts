@@ -63,7 +63,7 @@ export async function userRoutes(fastify: FastifyInstance) {
     fastify.put<{ Body: BodyParams; Params: IdParam }>('/user/:id', async (request, reply) => {
         const { id, userId } = request.params
         const { name, cpf, email, pis, password, country, state, cep, city, street, number, complement } = request.body
-        const getAddress: any = await prisma.address.findFirst({
+        const getAddress = await prisma.address.findFirst({
             where: {
                 userId
             },

@@ -1,29 +1,36 @@
 import { api } from "../hooks/axios"
 import { parseCookies, destroyCookie } from 'nookies'
-import { useRouter } from 'next/router'
 import Link from "next/link"
+import { LinkButton } from "../components/LinkButton"
+import { useRouter } from 'next/router'
+import { Button } from "../components/Button"
+import { FormDiv } from "../components/FormDiv"
 
-export function logout(ctx) {
-    alert('Usuario deslogado!')
-    destroyCookie(ctx, 'register.token')
-    console.log('teste')
-}
+
 
 function Dashboard({ userName }) {
+
+    const router = useRouter()
     const arrayName = userName.split(" ")
     const firstName = arrayName[0]
 
+    function logout() {
+        alert('Usuario deslogado!')
+        destroyCookie(null, 'register.token')
+        router.push('/signin')
+        
+    }
+
     return (
 
-        <div>
+        <FormDiv>
 
-            <h1>Olá {firstName} </h1>
-            <Link href="/update" >Editar perfil</Link>
-            <Link href="/signin" onClick={logout} >Logout</Link>
-
-        </div>
-
-
+            <h1 className="text-4xl font-medium mt-40">Olá {firstName} </h1>
+            <div className=" flex justify-center gap-6 pt-4">
+            <LinkButton href="/update" >Editar perfil</LinkButton>
+            <Button onClick={logout} key={'SECONDARY'}>Logout</Button>
+            </div>
+        </FormDiv>
     )
 }
 

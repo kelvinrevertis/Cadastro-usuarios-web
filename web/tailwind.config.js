@@ -5,23 +5,34 @@ module.exports = {
   ],
   theme: {
     extend: {
-      fontFamily:{
+      fontFamily: {
         sans: 'Rubik, sans-serif'
       },
-      width:{
-        w-2full: 200%
+      minWidth: {
+        'min-w-200': '200px'
       },
-      colors:{
-      gray:{
-        900: '#eee'
+      minHeight: {
+        'min-h-50': '50px'
       },
-      turquoise:{
-        100: '#243341',
-        200: '#2c3e50',
-        300: '#2C3E50',
-        500: '#566573'
+      boxShadow:{
+        shadowBotton: '0 10px  0'
+      },
+      colors: {
+        gray: {
+          100: '#eee'
+        },
+        turquoise: {
+          800: '#243341',
+          700: '#2c3e50',
+          600: '#2C3E50',
+          500: '#566573'
+        },
+        carmine:{
+          700:'#712f26',
+          500:'#8d3b30',
+          800:'#5a2720'
+        }
       }
-}
     },
   },
   plugins: [],

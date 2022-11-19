@@ -1,45 +1,42 @@
-import Link from "next/link";
-import Router from 'next/router'
-import { parseCookies } from "nookies";
-import { useState } from "react";
+import Router, { useRouter } from 'next/router'
+import { destroyCookie, parseCookies } from "nookies";
+import { useRef, useState } from "react";
 import { api } from "../hooks/axios";
-import { logout } from './dashboard'
 import { Input } from "../components/Input";
+import { useForm } from "react-hook-form";
+import { FormDiv } from "../components/FormDiv";
+import { LinkButton } from "../components/LinkButton";
+import { Button } from "../components/Button";
 
 
 function UpdateUser({ user, address }) {
-    const [update, setUpdate] = useState({})
+    const { register, handleSubmit } = useForm();
+    const [userData, setUserData] = useState({ ...user, ...address })
+    const formRef = useRef(null)
+    const router = useRouter()
 
-    function handleChange(event) {
-        setUpdate({
-            ...update,
-            [event.target.name]: event.target.value
-        });
+    function logout() {
+        alert('Usuario deslogado!')
+        destroyCookie(null, 'register.token')
+        router.push('/signin')
+
     }
 
-    async function updateUser(event) {
-
-        event.preventDefault();
-
-        console.log('Usuario:', update)
-
+    const updateUser = handleSubmit(async (data) => {
         try {
-            await api.put(`/user/${user.id}`, update);
-            console.log(user.id)
-
+            await api.put(`/user/${user.id}`, data);
+            setUserData(prevState => ({ ...prevState, ...data }))
             alert('Usuario editado com sucesso!')
-            console.log(update)
         } catch (erro) {
 
             alert('Erro ao editar usuario!')
 
         } finally {
-            event.target.reset()
-            document.location.reload();
+            formRef.current.reset()
         }
-    }
+    })
 
-    async function deleteUser(event) {
+    async function deleteUser() {
         try {
             await api.delete(`/user/${user.id}`)
 
@@ -51,49 +48,51 @@ function UpdateUser({ user, address }) {
             alert('Erro ao deletar usuario!')
 
         } finally {
-            logout(event)
+            logout()
         }
     }
 
     return (
 
-        <div>
-            <h1>Atualize seus dados! </h1>
-            <form onSubmit={updateUser}>
+        <FormDiv>
+            <h1 className="text-2xl font-medium mb-4">Atualize seus dados! </h1>
+            <form onSubmit={updateUser} ref={formRef}>
 
+                <Input type="text" required name="name" placeholder={userData.name} {...register('name')} />
 
-                <Input type="text" name="name" placeholder={user.name} onChange={handleChange} />
+                <Input type="text" required name="email" placeholder={userData.email} {...register('email')} />
 
-                <Input type="text" name="email" placeholder={user.email} onChange={handleChange} />
+                <Input type="text" required name="cpf" placeholder={userData.cpf} {...register('cpf')} />
 
-                <Input type="text" name="cpf" placeholder={user.cpf} onChange={handleChange} />
+                <Input type="text" required name="pis" placeholder={userData.pis} {...register('pis')} />
 
-                <Input type="text" name="pis" placeholder={user.pis} onChange={handleChange} />
+                <Input type="text" required name="password" placeholder={userData.password} {...register('password')} />
 
-                <Input type="text" name="password" placeholder={user.password} onChange={handleChange} />
+                <Input type="text" required name="country" placeholder={userData.country} {...register('country')} />
 
-                <Input type="text" name="country" placeholder={address.country} onChange={handleChange} />
+                <Input type="text" required name="state" placeholder={userData.state} {...register('state')} />
 
-                <Input type="text" name="state" placeholder={address.state} onChange={handleChange} />
+                <Input type="text" required name="city" placeholder={userData.city} {...register('city')} />
 
-                <Input type="text" name="city" placeholder={address.city} onChange={handleChange} />
+                <Input type="text" required name="cep" placeholder={userData.cep} {...register('cep')} />
 
-                <Input type="text" name="cep" placeholder={address.cep} onChange={handleChange} />
+                <Input type="text" required name="street" placeholder={userData.street} {...register('street')} />
 
-                <Input type="text" name="street" placeholder={address.street} onChange={handleChange} />
+                <Input type="text" required name="number" placeholder={userData.number} {...register('number')} />
 
-                <Input type="text" name="number" placeholder={address.number} onChange={handleChange} />
+                <Input type="text" name="complement" placeholder={userData.complement} {...register('complement')} />
 
-                <Input type="text" name="complement" placeholder={address.complement} onChange={handleChange} />
+                <div className=" flex justify-center gap-6 pt-4">
+                    <Button>Atualizar</Button>
+                    <LinkButton href="/dashboard">Retornar</LinkButton>
 
-                <button>Atualizar</button>
-                <Link href="/dashboard">Retornar</Link>
+                    <button className='bg-carmine-700 hover:bg-carmine-500 
+                    text-white p-4 shadow-shadowBotton shadow-carmine-800 w-36'
+                    onClick={deleteUser}>Deletar usuario</button>
+                </div>
             </form>
-            <Link href="/signin" onClick={deleteUser}>Deletar usuario</Link>
-        </div>
-
+        </FormDiv>
     )
-
 }
 
 export default UpdateUser
