@@ -74,7 +74,7 @@ function UpdateUser({ user, address }) {
 
                 <Input type="text" required name="city" placeholder={userData.city} {...register('city')} />
 
-                <Input type="text" required name="cep" placeholder={userData.cep} {...register('cep')} />
+                <Input type="text" name="cep" placeholder={userData.cep} {...register('cep')} />
 
                 <Input type="text" required name="street" placeholder={userData.street} {...register('street')} />
 
