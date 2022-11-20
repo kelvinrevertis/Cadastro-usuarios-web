@@ -55,9 +55,9 @@ function UpdateUser({ user, address }) {
     return (
 
         <FormDiv>
-            <h1 className="text-2xl font-medium mb-4">Atualize seus dados! </h1>
+            <h1 className="text-2xl font-medium pt-4 mb-4">Atualize seus dados! </h1>
             <form onSubmit={updateUser} ref={formRef}>
-
+                
                 <Input type="text" required name="name" placeholder={userData.name} {...register('name')} />
 
                 <Input type="text" required name="email" placeholder={userData.email} {...register('email')} />
@@ -87,8 +87,9 @@ function UpdateUser({ user, address }) {
                     <LinkButton href="/dashboard">Retornar</LinkButton>
 
                     <button className='bg-carmine-700 hover:bg-carmine-500 
-                    text-white p-4 shadow-shadowBotton shadow-carmine-800 w-36'
+                    text-white items-center shadow-shadowBotton shadow-carmine-800 w-36'
                     onClick={deleteUser}>Deletar usuario</button>
+
                 </div>
             </form>
         </FormDiv>
