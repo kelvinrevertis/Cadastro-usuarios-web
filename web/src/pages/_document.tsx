@@ -1,5 +1,5 @@
 import { Html, Head, Main, NextScript } from 'next/document'
-import { WhatsappLogo, GithubLogo, LinkedinLogo } from 'phosphor-react'
+import { WhatsappLogo, GithubLogo, LinkedinLogo, EnvelopeSimple } from 'phosphor-react'
 
 export default function document() {
     return (
@@ -18,6 +18,7 @@ export default function document() {
                             <span>  <WhatsappLogo className='inline ' size={20} /> (33)98704-6181 </span>
                             <span>  <GithubLogo className='inline' size={20} /> <a href="https://github.com/kelvinrevertis">github</a> </span>
                             <span>  <LinkedinLogo className='inline' size={20} /><a href="https://www.linkedin.com/in/kelvin-revertis/">linkedin</a></span>
+                            <span>  <EnvelopeSimple className='inline' size={20} /><a href="kelvinrev2@hotmail.com">e-mail</a></span>
                         </p>
                     </div>
                 </header>
