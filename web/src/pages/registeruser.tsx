@@ -24,12 +24,17 @@ function RegisterUser() {
             await api.post('/user', user);
 
             alert(`Usuário criado com sucesso!`)
+            event.target.reset()
 
         } catch (error) {
-            alert('Falha ao criar o usuario!')
+            const errors = error?.response?.data
 
-        } finally {
-            event.target.reset()
+            if (errors.type == 'Erro de validação') {
+                return alert(`Falha ao criar o usuario:\n${errors.message.map(error => error.message).join('\n')}`)
+
+            }
+            alert('Erro: dados inválidos!')
+
         }
     }
     return (

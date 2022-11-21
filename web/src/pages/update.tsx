@@ -112,7 +112,7 @@ export const getServerSideProps = async (ctx) => {
     const { data: userData } = await api.get('/login', { headers: { authorization: `Bearer ${token}` } })
 
     const user = userData.user
-    const address = userData.user.userAdresses[0]
+    const address = userData.user.userAdresses
     return {
         props: { user, address }
     }

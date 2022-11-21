@@ -1,15 +1,15 @@
 import { FastifyInstance, FastifyRequest } from "fastify";
-import { z } from "zod";
+import { z, ZodError } from "zod";
 import { prisma } from "../lib/prisma";
 import { BodyParams, IdParam } from "../server";
 import jwt from "jsonwebtoken"
 
 const userBody = z.object({
     name: z.string(),
-    email: z.string(),
+    email: z.string().email('E-mail inválido!'),
     cpf: z.string(),
     pis: z.string(),
-    password: z.string(),
+    password: z.string().min(6, "Valor minimo de caracteres: 6"),
     country: z.string(),
     state: z.string(),
     city: z.string(),
@@ -27,32 +27,26 @@ export async function userRoutes(fastify: FastifyInstance) {
             where: {
                 id: String(id),
             },
-            include: {
-                userAdresses: {
-                    where: {
-                        userId: String(id)
-                    }
-                }
-            }
+            select: {
+                id: true,
+                name: true,
+                cpf: true,
+                email: true,
+                pis: true,
+                userAdresses: true
+            },
+
         })
 
         return reply.status(200).send(user)
     })
 
 
-    fastify.get<{ Body: BodyParams; Params: IdParam }>('/user', async (request, reply) => {
-        const { id, userId } = request.params;
+    fastify.get('/user', async () => {
 
         const user = await prisma.user.findMany({
-            where: {
-                id,
-            },
             include: {
-                userAdresses: {
-                    where: {
-                        userId
-                    }
-                }
+                userAdresses: true
             }
         })
 
@@ -61,17 +55,24 @@ export async function userRoutes(fastify: FastifyInstance) {
 
 
     fastify.put<{ Body: BodyParams; Params: IdParam }>('/user/:id', async (request, reply) => {
-        const { id, userId } = request.params
+        const { id } = request.params
         const { name, cpf, email, pis, password, country, state, cep, city, street, number, complement } = request.body
-        const getAddress = await prisma.address.findFirst({
-            where: {
-                userId
-            },
-        })
 
-        const address = await prisma.address.update({
+
+        const getUser = await prisma.user.findUnique({
             where: {
-                id: getAddress!.id
+                id: String(id),
+            },
+            include: {
+                userAdresses: true
+            }
+        })
+        if (!getUser) {
+            return reply.status(404).send({ mensagem: 'Usuário não encontrado!' })
+        }
+        await prisma.address.update({
+            where: {
+                id: getUser.userAdresses!.id
             },
             data: {
                 country,
@@ -80,50 +81,62 @@ export async function userRoutes(fastify: FastifyInstance) {
                 cep,
                 street,
                 number,
-                complement,
-            },
+                complement
+            }
         })
         const user = await prisma.user.update({
             where: {
-                id,
+                id
             },
             data: {
                 name,
                 email,
                 cpf,
                 pis,
-                password,
+                password
             }
         })
-        return reply.status(200).send({ user, address })
+        return reply.status(200).send({ user })
+
     })
 
     fastify.post<{ Body: BodyParams; Params: IdParam }>('/user', async (request, reply) => {
-        const { name, cpf, email, pis, password, country, state, cep, city, street, number, complement } = userBody.parse(request.body)
-        const userAndAddress = await prisma.user.create({
+        try {
+            const { name, cpf, email, pis, password, country, state, cep, city, street, number, complement } = userBody.parse(request.body)
+            const userAndAddress = await prisma.user.create({
 
-            data: {
-                name,
-                email,
-                cpf,
-                pis,
-                password,
+                data: {
+                    name,
+                    email,
+                    cpf,
+                    pis,
+                    password,
 
-                userAdresses: {
-                    create: {
-                        country,
-                        state,
-                        city,
-                        cep,
-                        street,
-                        number,
-                        complement,
+                    userAdresses: {
+                        create: {
+                            country,
+                            state,
+                            city,
+                            cep,
+                            street,
+                            number,
+                            complement,
+                        }
                     }
                 }
-            }
-        })
+            })
 
-        return reply.status(201).send({ userAndAddress })
+            return reply.status(201).send({ userAndAddress })
+
+        } catch (error: any) {
+
+            if (error instanceof ZodError) {
+                return reply.status(400).send({message: error.errors, type: 'Erro de validação'})
+            }
+            return reply.status(400).send({message: error.message, type:'Erro database'})
+
+        }
+
     })
 
     fastify.post<{ Body: BodyParams }>('/signin', async (request/*: FastifyRequest<{Body:{email:string,password:string}}>*/, reply) => {
@@ -172,15 +185,10 @@ export async function userRoutes(fastify: FastifyInstance) {
                 id: String(id),
             },
             include: {
-                userAdresses: {
-                    where: {
-                        userId: String(id)
-                    }
-                }
+                userAdresses: true
             }
         })
-        console.log('ID:', id)
-        console.log('USUARIO E ENDEREÇO:', user?.userAdresses[0].country)
+
         return reply.status(200).send({ user })
 
     })

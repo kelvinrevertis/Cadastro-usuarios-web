@@ -15,7 +15,7 @@ model User {
   pis      String? @unique
   password String
 
-  userAdresses Address[]
+  userAdresses Address?
 }
 
 model Address {
@@ -28,6 +28,6 @@ model Address {
   number     String
   complement String?
 
-  userId String
+  userId String @unique
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

@@ -25,6 +25,7 @@ Application Fullstack.
 - NextJS
 - JWT
 - TailwindCss
+- Zod
 - And more...
 
 
